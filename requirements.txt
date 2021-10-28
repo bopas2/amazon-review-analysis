@@ -1,0 +1,12 @@
+numpy
+pandas
+scikit-learn
+sklearn
+pickle4
+Flask
+gunicorn
+pillow
+dash
+torch
+torchvision
+torchaudio
