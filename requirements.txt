@@ -1,3 +1,7 @@
+pyvis==0.1.9
+streamlit==1.2.0
+networkx==2.6.3
+openpyxl==3.0.5
 numpy
 pandas
 scikit-learn
@@ -10,3 +14,4 @@ dash
 torch
 torchvision
 torchaudio
+transformers

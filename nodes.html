@@ -1,0 +1,212 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 100%;
+            height: 800px;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": 1, "label": "pog pog", "shape": "dot"}, {"id": 2, "label": "gps finds charging", "shape": "dot", "size": 25, "title": "Product: eForCity Car Charger Compatible with Garmin nuvi 200 200w 250 250w 260 270\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 3, "label": "fits 34 tablet", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: Masione\u0026trade; Universal Leather Folding Folio Tablet Case Cover and Touch Screen Stylus Pen (7\"-8\" Tablet with Detachable Keyboard, Pink)\u003cbr\u003eRating:2"}, {"id": 4, "label": "wallet case convenient", "shape": "dot", "size": 25, "title": "Product: Tpu Apple iPod Touch 5,Case for iPod touch 5\u003cbr\u003eRating:5Positive Review"}, {"id": 5, "label": "fits 2005 dodge", "shape": "dot", "size": 25, "title": "Product: LT Sport serial#3C-72 for BLACK 3\"/76mm SHORT ANTENNA CARBON FIBER RADIO SCREW TYPE\u003cbr\u003eRating:5Positive Review"}, {"id": 6, "label": "bundle 10yr old", "shape": "dot", "size": 20, "title": "Product: Diy iPod Touch 4 case , Fashion case for iPod touch 4 case\u003cbr\u003eRating:4Positive Review"}, {"color": "#FF0000", "id": 7, "label": "cables started heating", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: (3pc Cables) - Apple Sync USB Cable Charger Lightning to USB for iPhone 5, iPod \u0026 iPad 4, \"The New iPad Air\" and iPad Mini with Retina Display - EXTRA SMALL (5-Inch Only) - WHITE\u003cbr\u003eRating:1"}, {"id": 8, "label": "wipe finger prints", "shape": "dot", "size": 20, "title": "Product: 6X Anti Glare Matte LCD Screen Protector Guard Film Shield Cover for ipod Touch 4 4g 4th Gen (6 Pack)\u003cbr\u003eRating:4Positive Review"}, {"id": 9, "label": "mounting edge tablet", "shape": "dot", "size": 20, "title": "Product: MiniGuard Samsung Galaxy Note 10.1 Inch Tablet N8000 N8010 Screen Protector (Matte Anti-Glare, 3 Pack), S-Pen Compatible\u003cbr\u003eRating:4Positive Review"}, {"id": 10, "label": "fits opening micro", "shape": "dot", "size": 15, "title": "Product: 360 Degree Rotating Cover Case for Samsung Galaxy Tab 2 7.0 7-inch Tablet, Black with Multi-angle Stand Sheath With Screen Protector and Stylus Bundle\u003cbr\u003eRating:3Positive Review"}, {"id": 11, "label": "fits surface pad", "shape": "dot", "size": 25, "title": "Product: OMOTON (TM) Folio Case with Stand for Microsoft Surface RT / Surface 2 (Does not fit Surface Pro Version, Keyboard and Tablet NOT included), For Surface 2 / Surface RT, Black\u003cbr\u003eRating:5Positive Review"}, {"id": 12, "label": "greeting card awesome", "shape": "dot", "size": 25, "title": "Product: Pioneer X-EM21 Micro HiFi CD/FM Stereo System with iPod-Dock USB-in Remote\u003cbr\u003eRating:5Positive Review"}, {"id": 13, "label": "adapter charging", "shape": "dot", "size": 25, "title": "Product: 2 Pack of Superior Quality 8 pin to 30 pin Charging Cable Adapter for iPhone 6 6plus 5s 5c 5 iPad 3 4 ipad mini iPod Nano (7th Gen) iPod touch (5th Gen)\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 14, "label": "cables different phones", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Usa-apple Iphone 5 Iphone Lightning Adapter 8 Pin to 30pin for Iphone 5 Ipod 5 Nano 7th Gen USA\u003cbr\u003eRating:1"}, {"id": 15, "label": "outlet extra outlet", "shape": "dot", "size": 20, "title": "Product: Shefko PowerHub AC / USB Wall Mount Charging Station with Slide Out Holders for iPad, Smartphone and MP3 Player - Ul Certified Power Surge Protected - 2 USB Charger Ports (2.1 Amps) and 3 Ac Outlet Plugs - Fireproof and Spike Proof\u003cbr\u003eRating:4Positive Review"}, {"id": 16, "label": "robust product shipped", "shape": "dot", "size": 25, "title": "Product: ETrance 360 Degree Rotating Car Mount Holder Compatible for DVR DOD LS300W LS430W\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 17, "label": "gps just continuously", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: Car Adapter For nextar P3 GPS X11-15302 X11-15297 Auto Power Cord Supply Charger\u003cbr\u003eRating:2"}, {"color": "#FF0000", "id": 18, "label": "gps work charging", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: For Navigon 2100T 2100 2120 7200T 8100t 7100 8100 7200 Max GPS Premium Car Charger (No PC or Sleep mode during charging.)\u003cbr\u003eRating:1"}, {"id": 19, "label": "neat little screens", "shape": "dot", "size": 15, "title": "Product: 6-Pack Mirror Screen Protector for Apple iPod Touch 4th Gen\u003cbr\u003eRating:3Positive Review"}, {"id": 20, "label": "fits perfect buttons", "shape": "dot", "size": 25, "title": "Product: HHI Rubber Quick Clip Case for iPod Nano 7th Generation - Black (Package include a HandHelditems Sketch Stylus Pen)\u003cbr\u003eRating:5Positive Review"}, {"id": 21, "label": "antenna car picks", "shape": "dot", "size": 15, "title": "Product: BestDealUSA Universal Am-Fm Am Fm Hidden Windshield Antenna Car Radio\u003cbr\u003eRating:3Positive Review"}, {"id": 22, "label": "sensitivity nice slick", "shape": "dot", "size": 20, "title": "Product: Xo Skins Screen Protector For Samsung Galaxy Nexus Case Fit\u003cbr\u003eRating:4Positive Review"}, {"color": "#FF0000", "id": 23, "label": "adapter useless", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: Patazon Black Extension Dock Extender 30pin Adapter for iPod iPhone 4 4S\u003cbr\u003eRating:2"}, {"id": 24, "label": "cooler home stereo", "shape": "dot", "size": 25, "title": "Product: Origaudio Universal Rock-it 3.0 Portable Vibration Speaker with Rechargeable Battery 3.5mm - Black\u003cbr\u003eRating:5Positive Review"}, {"id": 25, "label": "smal portable", "shape": "dot", "size": 20, "title": "Product: Origaudio Universal Rock-it 3.0 Portable Vibration Speaker W/ Rechargeable Battery (3.5mm) - Red\u003cbr\u003eRating:4Positive Review"}, {"color": "#FF0000", "id": 26, "label": "adapter plugs", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Fm Transmitter, Keedox Car Radio Transmitter Car kit with 3.5mm Aux Audio Input, Car Charger Adapter for Apple iPhone 6s Plus, 6s, Samsung and More\u003cbr\u003eRating:1"}, {"id": 27, "label": "recommend looking transmitter", "shape": "dot", "size": 25, "title": "Product: FM Transmitter \u0026 Car Charger with LCD Screen - for Apple iPod / Iphone / Itouch / Nano\u003cbr\u003eRating:5Positive Review"}, {"id": 28, "label": "tablet able updates", "shape": "dot", "size": 25, "title": "Product: N2A Cards (R) - Transform your Nook Tablet into a Kit-Kat 4.4.2 Android Tablet (new 2014 version) - (16 GB)\u003cbr\u003eRating:5Positive Review"}, {"id": 29, "label": "dial pretty awesome", "shape": "dot", "size": 25, "title": "Product: \"Ultimate Arms Gear Tactical Combo Combination Package Kit Set Pistol Includes Aluminum Weaver Picatinny Top \u0026 Bottom Rail Pistol Gun Handgun Scope Mount + Tactical \"\"CQB\"\" Pistol Red-Green 4 Reticle Red Dot Open Reflex Sight/Scope + New Gen. Tactical Pistol Gun Compact QD LED Flashlight Light \u0026 Red Dot Laser Sight Combo With Weaver / Picatinny Base Rail Fits Taurus \u0026 Springfield Armory XDM 3.8 4.\u003cbr\u003eRating:5Positive Review"}, {"id": 30, "label": "smells like melting", "shape": "dot", "size": 20, "title": "Product: Apple Ipod Touch 4 4g 4th Generation Light Blue Gameboy Silicon Gel Cover Case Protector + Screen Protector + Microfiber Pouch Bag\u003cbr\u003eRating:4Positive Review"}, {"color": "#FF0000", "id": 31, "label": "seldom works correctly", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Gino\u003cbr\u003eRating:1"}, {"id": 32, "label": "fits 34 buttons", "shape": "dot", "size": 25, "title": "Product: eForCityLeather Case for Barnes and Noble Nook Simple Touch with GlowLight , Black\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 33, "label": "charging phone camping", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: EC TECHNOLOGY? New design Backup External Battery Pack and Charger (Power Bank) with flashlight\u003cbr\u003eRating:1"}, {"id": 34, "label": "seller quick transmitter", "shape": "dot", "size": 15, "title": "Product: Viotek Universal Wireless FM Transmitter for iPhone / Android / mp3 Players\u003cbr\u003eRating:3Positive Review"}, {"color": "#FF0000", "id": 35, "label": "gps unit updates", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: Holux GPSmile 52 Voice GPS Navigation System with US \u0026 Canada Map, MP3 player, photo viewer.\u003cbr\u003eRating:2"}, {"id": 36, "label": "bmw factory stereo", "shape": "dot", "size": 20, "title": "Product: Eonon GA5150 Android 4.2.2 + Flush Mount Backup Camera - e46 BMW - 7\" DVD Player GPS Navigation\u003cbr\u003eRating:4Positive Review"}, {"id": 37, "label": "cassette music itunes", "shape": "dot", "size": 25, "title": "Product: Encore Cassette Converter\u003cbr\u003eRating:5Positive Review"}, {"id": 38, "label": "affordable field recorder", "shape": "dot", "size": 25, "title": "Product: TASCAM DR-05 Portable Digital Recorder - FREE, USB cable, 2gb SD Card, AAA battery and Spider Tripod (ProSoundGear) Authorized Dealer\u003cbr\u003eRating:5Positive Review"}, {"id": 39, "label": "hooked car stereo", "shape": "dot", "size": 25, "title": "Product: NEEWER Apple iPod iPhone Accessories. Wireless FM Transmitter with remote and Car Charger for Apple iPod Touch iPod Classic and APPLE iPhone 4. Full Range Frequency\u003cbr\u003eRating:5Positive Review"}, {"id": 40, "label": "cassette player recorder", "shape": "dot", "size": 15, "title": "Product: Mini CD/AM/FM/Single Cassette Player/Recorder W/Detachable Speakers Programmable Track Memory\u003cbr\u003eRating:3Positive Review"}, {"id": 41, "label": "adapter outlet", "shape": "dot", "size": 25, "title": "Product: Shefko PowerHub AC / USB Wall Mount Charging Station with Slide Out Holders for iPad, Smartphone and MP3 Player - Ul Certified Power Surge Protected - 2 USB Charger Ports (2.1 Amps) and 3 Ac Outlet Plugs - Fireproof and Spike Proof\u003cbr\u003eRating:5Positive Review"}, {"id": 42, "label": "install 2000 ranger", "shape": "dot", "size": 20, "title": "Product: Stereo Install Dash Kit Ford Ranger 98 99 00 01 2000 (car radio wiring installation parts)\u003cbr\u003eRating:4Positive Review"}, {"color": "#FF0000", "id": 43, "label": "tablet ordered granddaughters", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: iGet\u00ae Nook Tablet \u0026 Nook Color Case Deluxe Folio Cover + Luxeto Screen Guard (2-PC Combo) PINK\u003cbr\u003eRating:2"}, {"id": 44, "label": "chevrolet parts dealer", "shape": "dot", "size": 25, "title": "Product: Chevy Chevrolet Trailblazer Bowtie Emblem decal Genuine GM Part\u003cbr\u003eRating:5Positive Review"}, {"id": 45, "label": "antenna del sol", "shape": "dot", "size": 15, "title": "Product: Evan-Fischer EVA39972032644 Antenna Manual Polished\u003cbr\u003eRating:3Positive Review"}, {"id": 46, "label": "tablet remained haunted", "shape": "dot", "size": 25, "title": "Product: 360 Degree Rotating Cover Case for Samsung Galaxy Tab 2 7.0 7-inch Tablet, Pink with Multi-angle Stand Sheath with Screen Protector and Stylus Bundle\u003cbr\u003eRating:5Positive Review"}, {"id": 47, "label": "fits perfect buttons", "shape": "dot", "size": 25, "title": "Product: VW Volkswagen Brown Remote Flip Key Silicone Protecting Key Case Cover Fob Holder 3 Buttons\u003cbr\u003eRating:5Positive Review"}, {"id": 48, "label": "zen product charging", "shape": "dot", "size": 20, "title": "Product: Travel Wall Charger fits Creative Zen Vision / Vision:M / Sleek / Sleek Photo...\u003cbr\u003eRating:4Positive Review"}, {"id": 49, "label": "install 2007 honda", "shape": "dot", "size": 25, "title": "Product: Honda to Sony\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 50, "label": "tablet kept crashing", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: 360 Degree Rotating Cover Case for Samsung Galaxy Tab 2 7.0 7-inch Tablet, Pink with Multi-angle Stand Sheath with Screen Protector and Stylus Bundle\u003cbr\u003eRating:2"}, {"color": "#FF0000", "id": 51, "label": "cassette products tapes", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Sharp CD-DH790N Mini Stereo Audio System\u003cbr\u003eRating:1"}, {"id": 52, "label": "converting old cassette", "shape": "dot", "size": 20, "title": "Product: Weanas Tape to PC Super USB Cassette-to-MP3 Converter Capture Portable Handheld Audio Music Player with Headphones\u003cbr\u003eRating:4Positive Review"}, {"color": "#FF0000", "id": 53, "label": "gps case seller", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Large Hard Shell GPS case for GARMIN NUVI 200 200W 250 250W 260 270 310 350 360 370 610 650 660 670 680 750 760 770\u003cbr\u003eRating:1"}, {"id": 54, "label": "packaging easily hooked", "shape": "dot", "size": 20, "title": "Product: Hifonics Zeus ZRX1200.2 1200 Watt 2-Channel A/B Car Audio Amplifier With Thermal, Overload, and Speaker Short Protection\u003cbr\u003eRating:4Positive Review"}, {"id": 55, "label": "gps window dash", "shape": "dot", "size": 25, "title": "Product: Portable Friction Beanbag Dashboard Mount\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 56, "label": "cables work consistently", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: Apple USB Lightning Cable 9ft -NEW 2014 for iOS 7 - iSmooth\u0027s 2nd Generation Apple Lightning Compatible (iOS 7 compatible) Cable Designed to Sync and Charge iPhone 5, iPhone 5S, iPhone 5C, iPad Mini, iPad Mini 2, iPad 5, iPad 4th Generation, iPod Nano (7th Generation), iPod Touch (5th Generation 16GB, 32GB, 64GB) - Premium Quality - The ONLY Cable with a 10-Year Guarantee!\u003cbr\u003eRating:2"}, {"color": "#FF0000", "id": 57, "label": "plug end melted", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: LingsFire\u00ae BaoFeng 7.4V 3800mAh Li-ion Battery For Two Way Radio Interphone Transceiver Walkie Talkie UV-5R UV-5RA Series + Car Charger\u003cbr\u003eRating:1"}, {"color": "#FF0000", "id": 58, "label": "gps vehicle dash", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: Car Vent Swivel Mount for TomTom One One 3rd Edition \u0026 One LE GPS\u003cbr\u003eRating:2"}, {"id": 59, "label": "tuned station tunes", "shape": "dot", "size": 25, "title": "Product: Advanced Car Mount System for Apple iPod Video/Classic/NANO 4th Generation - 360 degrees rotating Neck, built-in cutting edge FM Transmitter \u0026 Charger\u003cbr\u003eRating:5Positive Review"}, {"id": 60, "label": "plug outside plugs", "shape": "dot", "size": 15, "title": "Product: AC Adapter For Rocketfish RF-RBWS02 Wireless Indoor/Outdoor Speaker Charger Power Supply Cord\u003cbr\u003eRating:3Positive Review"}, {"color": "#FF0000", "id": 61, "label": "install car stereo", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: NEW PAC SWI-RC ALL-IN-ONE SWI INTERFACE (12 VOLT-CAR STEREO ACCESS)\u003cbr\u003eRating:2"}, {"id": 62, "label": "cheaper newegg", "shape": "dot", "size": 25, "title": "Product: GreatShield slim Design Genuine Leather Folio Stand Case for The New iPad 2012 Version / Apple iPad 2 2nd Generation / iPad 3 HD 3rd Generation - Black\u003cbr\u003eRating:5Positive Review"}, {"id": 63, "label": "antenna used portable", "shape": "dot", "size": 25, "title": "Product: MIRROR MOUNT 3 way Aluminum with Stud for CB / Ham Radio Antenna Bracket - Workman RV1\u003cbr\u003eRating:5Positive Review"}, {"id": 64, "label": "gps mount portable", "shape": "dot", "size": 25, "title": "Product: Garmin Nuvi GPS Portable Dashboard Friction Mount Kit\u003cbr\u003eRating:5Positive Review"}, {"id": 65, "label": "compartment small recorder", "shape": "dot", "size": 25, "title": "Product: CaseCrown Compartment Case (Black) for Sony Digital Flash Voice Recorder\u003cbr\u003eRating:5Positive Review"}, {"id": 66, "label": "plug charge tablet", "shape": "dot", "size": 20, "title": "Product: Car Charger For Acer Iconia Tab\u003cbr\u003eRating:4Positive Review"}, {"id": 67, "label": "tablet need portable", "shape": "dot", "size": 25, "title": "Product: Ionic Bluetooth Keyboard Tablet Stand Leather Case for New Barnes \u0026 Noble Nook HD+ 9-inch Wifi (Black/ Brown)[Does not fit Nook Tablet]\u003cbr\u003eRating:5Positive Review"}, {"id": 68, "label": "diagnostics scan", "shape": "dot", "size": 25, "title": "Product: Fotga Newest V8.00.034 MINI VCI for TOYOTA TIS Techstream Diagnostic Cable \u0026 Software\u003cbr\u003eRating:5Positive Review"}, {"id": 69, "label": "protector film promptly", "shape": "dot", "size": 25, "title": "Product: Power Support Anti-Glare Film Set for iPhone (Original)\u003cbr\u003eRating:5Positive Review"}, {"id": 70, "label": "install 2006 toyota", "shape": "dot", "size": 20, "title": "Product: TOOGOO(R) 2 x 97dB 500W Dome Tweeters Black for Car Audio System\u003cbr\u003eRating:4Positive Review"}, {"id": 71, "label": "convenient long cord", "shape": "dot", "size": 25, "title": "Product: KHOMO Blue Color USB Power Wall Adapter Charger + Car Charger + 6ft EXTRA LONG Blue USB SYNC Cord Cable for Apple iPhone 4G 5G 4Gs iPod Nano iPod Touch\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 72, "label": "sensor 2001 bmw", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Air Mass Flow Sensor MAF BMW 330 530 X5 Z3 WK96132 13621438871\u003cbr\u003eRating:1"}, {"id": 73, "label": "wires worked phones", "shape": "dot", "size": 25, "title": "Product: iXCC Lightning Cable 3ft, iPhone charger, for iPhone X, 8, 8 Plus, 7, 7 Plus, 6s, 6s Plus, 6, 6 Plus, SE 5s 5c 5, iPad Air 2 Pro, iPad mini 2 3 4, iPad 4th Gen [Apple MFi Certified](Black and White)\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 74, "label": "cobra unit passport", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: PerformancePackage\u2122 Radar Detector MirrorWire Power Cable - Cobra XRS iRadar\u003cbr\u003eRating:1"}, {"id": 75, "label": "pluged stereo", "shape": "dot", "size": 25, "title": "Product: Alpine KCE 433iV - iPhone / iPod charging and data cable 6 Feet Long\u003cbr\u003eRating:5Positive Review"}, {"id": 76, "label": "650 true watts", "shape": "dot", "size": 20, "title": "Product: MA-8 - Skar Audio 8\" Dual 4-Ohm 400W RMS Subwoofer\u003cbr\u003eRating:4Positive Review"}, {"id": 77, "label": "gps case tablet", "shape": "dot", "size": 25, "title": "Product: eForCity 4.3\" EVA Case Compatible with Garmin Nuvi 265WT 1300 1350 1370T GPS\u003cbr\u003eRating:5Positive Review"}, {"id": 78, "label": "skque bundle works", "shape": "dot", "size": 20, "title": "Product: SKQUE Complete Item Accessories Bundle for Apple iphone /ipod\u003cbr\u003eRating:4Positive Review"}, {"color": "#FF0000", "id": 79, "label": "protector does bubble", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Kindle Fire anti-glare Screen Protector\u003cbr\u003eRating:1"}, {"color": "#FF0000", "id": 80, "label": "fits 2001 gmc", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Discount Keyless Replacement 3 Button Case and Glow in the Dark Button Pad Compatible with GM Remotes 15732803\u003cbr\u003eRating:1"}, {"id": 81, "label": "ant mount exceptional", "shape": "dot", "size": 25, "title": "Product: MIRROR MOUNT 3 way Aluminum with Stud for CB / Ham Radio Antenna Bracket - Workman RV1\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 82, "label": "recorder value menus", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Pyrus Electronics 8GB MP3 Multi Media Player with Touch Screen and Digital Camera\u003cbr\u003eRating:1"}, {"id": 83, "label": "adapt ancient outlets", "shape": "dot", "size": 20, "title": "Product: Adorama Grounded AC Plug Adapter 3 prong to 2 prong\u003cbr\u003eRating:4Positive Review"}, {"id": 84, "label": "wallet inch tablet", "shape": "dot", "size": 20, "title": "Product: CaseCrown Faux Suede Case (Navy) for Pandigital Novel 7 Inch Tablet and Color eReader\u003cbr\u003eRating:4Positive Review"}, {"id": 85, "label": "protector film bubble", "shape": "dot", "size": 15, "title": "Product: Enobu Clarity Dell Venue 8 Pro Premium HD Clear Screen Protector [2 Pack]- Lifetime Warranty\u003cbr\u003eRating:3Positive Review"}, {"id": 86, "label": "fits 2010 challenger", "shape": "dot", "size": 25, "title": "Product: Coastal MYGIG Lockpick Air\u003cbr\u003eRating:5Positive Review"}, {"id": 87, "label": "install cause bubble", "shape": "dot", "size": 15, "title": "Product: 3 Pack SCREEN GUARD PROTECTOR FILM FOR IPOD NANO 6 6TH GEN 6G- CLEAR\u003cbr\u003eRating:3Positive Review"}, {"id": 88, "label": "protector included buttons", "shape": "dot", "size": 25, "title": "Product: PCMICROSTORE New Creative Lab Zen 4gb 8gb 16gb Premium Silicone Skin Case Cover with Belt Clip and Adjustable Sports Armband - Bundle with Screen Protector Shield\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 89, "label": "corrupt did gps", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: E-PRANCE\u00ae Mini 0801 Car DVR Dash Camera Ambarella A2S60 Chip 5M pixel CMOS + GPS Logger + Build-in 8GB Memory + High Resolution Full HD 1080P 30 FPS + G-sensor + License Plate + 135 Degree Wide Angle View\u003cbr\u003eRating:1"}, {"id": 90, "label": "gps use triton", "shape": "dot", "size": 15, "title": "Product: Handlebar Mount and Custom Cradle for MAGELLAN Triton 1500 2000 GPS\u003cbr\u003eRating:3Positive Review"}, {"id": 91, "label": "repel bug", "shape": "dot", "size": 15, "title": "Product: LIFE-TECH AC House Home Wall Charger For Oregon Scientific Xplore Meep! Kid Safe Tablet\u003cbr\u003eRating:3Positive Review"}, {"color": "#FF0000", "id": 92, "label": "viewer mentioned transmitter", "shape": "dot", "size": 10, "title": "Negative Review\u003cbr\u003eProduct: BESTEK 4 iphone FM transmitter car ipod car FM transmitter mp3 player wireless FM transmitter usb with remote control SD / MMC card slot + USB stick + Audio input jack, mp3 FM transmitter car kit for iphone 4,3gs\u00263g,ipod touch.Nano,Classic S650\u003cbr\u003eRating:2"}, {"id": 93, "label": "packs 60 bucks", "shape": "dot", "size": 25, "title": "Product: Aspire Nautilus BVC Replacement Coils 20 Pieces 1.8 OHM (4 Boxes)\u003cbr\u003eRating:5Positive Review"}, {"id": 94, "label": "cables arrived promptly", "shape": "dot", "size": 25, "title": "Product: Aux Input Cable for 2007 Saturn Aura iPOD MP3 3G Touch\u003cbr\u003eRating:5Positive Review"}, {"id": 95, "label": "affordable problem decal", "shape": "dot", "size": 20, "title": "Product: Bundle Monster Barnes and Noble Nook Fit 1st Older Black and White Model Only 3G or Wifi Synthetic Leather Case Cover Jacket, Skin Sticker and Screen Protector Ebook Accessories Combo\u003cbr\u003eRating:4Positive Review"}, {"id": 96, "label": "cables reached expectations", "shape": "dot", "size": 25, "title": "Product: iXCC Lightning Cable 3ft, iPhone charger, for iPhone X, 8, 8 Plus, 7, 7 Plus, 6s, 6s Plus, 6, 6 Plus, SE 5s 5c 5, iPad Air 2 Pro, iPad mini 2 3 4, iPad 4th Gen [Apple MFi Certified](Black and White)\u003cbr\u003eRating:5Positive Review"}, {"id": 97, "label": "gps taken warranty", "shape": "dot", "size": 15, "title": "Product: Spot New 2 Satellite Gps Messenger - Orange\u003cbr\u003eRating:3Positive Review"}, {"id": 98, "label": "gps original antenna", "shape": "dot", "size": 25, "title": "Product: 3M RP-SMA Male GPS Active Antenna Cable Connector Adapter 3-5V\u003cbr\u003eRating:5Positive Review"}, {"color": "#FF0000", "id": 99, "label": "charging tried plug", "shape": "dot", "size": 5, "title": "Negative Review\u003cbr\u003eProduct: Wall AC Charger USB Sync Data Cable for iPhone 4, 3GS, and iPod\u003cbr\u003eRating:1"}, {"id": 100, "label": "stereo fully submerged", "shape": "dot", "size": 20, "title": "Product: Milennia PRV16 AM/FM Receiver 3-\u0026amp;#188;\u0026quot; Round Hole Cutout\u003cbr\u003eRating:4Positive Review"}, {"id": 101, "label": "premium car stereo", "shape": "dot", "size": 25, "title": "Product: VR3 VRCD400-SDU CD WMA MP3 PLAYER RDS CAR STEREO w/ EQUALIZER [Electronics]\u003cbr\u003eRating:5Positive Review"}]);
+        edges = new vis.DataSet([{"from": 1, "to": 2}, {"from": 1, "to": 3}, {"from": 1, "to": 4}, {"from": 1, "to": 5}, {"from": 1, "to": 6}, {"from": 1, "to": 7}, {"from": 1, "to": 8}, {"from": 1, "to": 9}, {"from": 1, "to": 10}, {"from": 1, "to": 11}, {"from": 1, "to": 12}, {"from": 1, "to": 13}, {"from": 1, "to": 14}, {"from": 1, "to": 15}, {"from": 1, "to": 16}, {"from": 1, "to": 17}, {"from": 1, "to": 18}, {"from": 1, "to": 19}, {"from": 1, "to": 20}, {"from": 1, "to": 21}, {"from": 1, "to": 22}, {"from": 1, "to": 23}, {"from": 1, "to": 24}, {"from": 1, "to": 25}, {"from": 1, "to": 26}, {"from": 1, "to": 27}, {"from": 1, "to": 28}, {"from": 1, "to": 29}, {"from": 1, "to": 30}, {"from": 1, "to": 31}, {"from": 1, "to": 32}, {"from": 1, "to": 33}, {"from": 1, "to": 34}, {"from": 1, "to": 35}, {"from": 1, "to": 36}, {"from": 1, "to": 37}, {"from": 1, "to": 38}, {"from": 1, "to": 39}, {"from": 1, "to": 40}, {"from": 1, "to": 41}, {"from": 1, "to": 42}, {"from": 1, "to": 43}, {"from": 1, "to": 44}, {"from": 1, "to": 45}, {"from": 1, "to": 46}, {"from": 1, "to": 47}, {"from": 1, "to": 48}, {"from": 1, "to": 49}, {"from": 1, "to": 50}, {"from": 1, "to": 51}, {"from": 1, "to": 52}, {"from": 1, "to": 53}, {"from": 1, "to": 54}, {"from": 1, "to": 55}, {"from": 1, "to": 56}, {"from": 1, "to": 57}, {"from": 1, "to": 58}, {"from": 1, "to": 59}, {"from": 1, "to": 60}, {"from": 1, "to": 61}, {"from": 1, "to": 62}, {"from": 1, "to": 63}, {"from": 1, "to": 64}, {"from": 1, "to": 65}, {"from": 1, "to": 66}, {"from": 1, "to": 67}, {"from": 1, "to": 68}, {"from": 1, "to": 69}, {"from": 1, "to": 70}, {"from": 1, "to": 71}, {"from": 1, "to": 72}, {"from": 1, "to": 73}, {"from": 1, "to": 74}, {"from": 1, "to": 75}, {"from": 1, "to": 76}, {"from": 1, "to": 77}, {"from": 1, "to": 78}, {"from": 1, "to": 79}, {"from": 1, "to": 80}, {"from": 1, "to": 81}, {"from": 1, "to": 82}, {"from": 1, "to": 83}, {"from": 1, "to": 84}, {"from": 1, "to": 85}, {"from": 1, "to": 86}, {"from": 1, "to": 87}, {"from": 1, "to": 88}, {"from": 1, "to": 89}, {"from": 1, "to": 90}, {"from": 1, "to": 91}, {"from": 1, "to": 92}, {"from": 1, "to": 93}, {"from": 1, "to": 94}, {"from": 1, "to": 95}, {"from": 1, "to": 96}, {"from": 1, "to": 97}, {"from": 1, "to": 98}, {"from": 1, "to": 99}, {"from": 1, "to": 100}, {"from": 1, "to": 101}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.0,
+            "damping": 0.09,
+            "nodeDistance": 100,
+            "springConstant": 0.01,
+            "springLength": 200
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
