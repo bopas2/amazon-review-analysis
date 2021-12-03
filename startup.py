@@ -24,6 +24,7 @@ class MultiPage:
         # run the app function 
         page['function']()
 
+st.set_page_config(layout="wide")
 
 app = MultiPage()
 

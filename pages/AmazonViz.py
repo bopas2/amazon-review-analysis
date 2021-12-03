@@ -30,4 +30,5 @@ def create(query = None):
         node['title'] += ' Neighbors:<br>' + '<br>'.join(neighbor_map[node['id']])
         node['value'] = len(neighbor_map[node['id']])
 
+    got_net.show_buttons(filter_=['nodes'])
     got_net.show('nodes.html')
