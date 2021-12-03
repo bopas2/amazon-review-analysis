@@ -17,8 +17,10 @@ def app():
         st.warning("Please enter a custom query")
     else:
         st.write("Your query is: ", query)
-        make_network.make_network(query)
+        df = make_network.make_network(query)
 
         HtmlFile = open('nodes.html','r',encoding='utf-8')
         source_code = HtmlFile.read()
-        components.html(source_code, height = 1200, width = 1200)
+        components.html(source_code, height = 1000, width = 1200)
+        #st.dataframe(df.head(15).sort_values("helpful_votes", ascending = False).sort_values("star_rating", ascending = False))
+

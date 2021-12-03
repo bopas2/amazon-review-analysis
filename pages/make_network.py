@@ -6,4 +6,6 @@ from pyvis.network import Network
 from pages import AmazonViz
 
 def make_network(query = None):
-    AmazonViz.create(query)
+    df = AmazonViz.create(query)
+
+    return df
