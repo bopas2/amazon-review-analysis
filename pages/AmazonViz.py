@@ -7,7 +7,6 @@ def create(query = None):
         # TODO - Currently hardcoded
         return 137
 
-
     df = pd.read_excel("cluster.xlsx")
     df = df.loc[df['label'] == cluster_finder(query)]
     df = df.applymap(str)
@@ -25,8 +24,8 @@ def create(query = None):
             senti = "Positive Review"
         if int(float(cur['Sentiment'])):
             net.add_node(i, label=df.iloc[i - 2]['keyword'],
-                        title="Product: " + str(df.iloc[i - 2]['product_title']) + '<br>' + "Rating:" + str(
-                            df.iloc[i - 2]['rating'])  + senti, size=int(float(cur['rating'])) * 5)
+                        title=senti + "<br>" + "Product: " + str(df.iloc[i - 2]['product_title']) + '<br>' + "Rating:" + str(
+                            df.iloc[i - 2]['rating']), size=int(float(cur['rating'])) * 5)
         else:
             net.add_node(i, label=df.iloc[i - 2]['keyword'],
                         title=senti + "<br>" + "Product: " + str(df.iloc[i - 2]['product_title']) + '<br>' + "Rating:" + str(
