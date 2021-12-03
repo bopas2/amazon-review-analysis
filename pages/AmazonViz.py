@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from transformers import DistilBertTokenizerFast
 from transformers import TFDistilBertForSequenceClassification
 from pyvis.network import Network
@@ -31,19 +30,6 @@ def create(query, tokenizer, attention_model, clustering_model):
 
     df = pd.read_excel("cluster.xlsx")
     df = df.loc[df['label'] == cluster_finder(query, tokenizer, attention_model, clustering_model)]
-=======
-from pyvis.network import Network
-import pandas as pd
-
-def create(query = None):
-    
-    def cluster_finder(query):
-        # TODO - Currently hardcoded
-        return 137
-
-    df = pd.read_excel("cluster.xlsx")
-    df = df.loc[df['label'] == cluster_finder(query)]
->>>>>>> 9ca6a1dea3d7cf53ecbabdc9f705069e5f9c3f03
     df = df.applymap(str)
     df = df.sample(n=100)
     titles = list(df['product_title'])
@@ -71,11 +57,7 @@ def create(query = None):
 
     net.hrepulsion(node_distance=100, spring_length=200)
     #net.show_buttons(filter_=['nodes'])
-<<<<<<< HEAD
     # net.show('nodes.html')
-=======
-    net.show('nodes.html')
->>>>>>> 9ca6a1dea3d7cf53ecbabdc9f705069e5f9c3f03
 
     return df
     #got_net = Network(height='750px', width='100%', bgcolor='#222222', font_color='white')
