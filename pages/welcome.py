@@ -4,5 +4,6 @@ import streamlit as st
  
 def app():
     st.markdown("### Hi! Welcome to the Amazon Reviews-based Recommendation System!")
-    st.markdown("We’ve built a way to visualize products that best matches a query.")
-    st.markdown("Try one of our example queries or enter a custom one. Use the sidebar to navigate this website.")
+    st.markdown("We’ve built a way to visualize products that are connected based on the user reviews")
+    st.markdown("See one of our example network graphs by selecting one from the sidebar on the left")
+

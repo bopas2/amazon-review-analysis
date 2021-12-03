@@ -31,6 +31,6 @@ st.title("Reviews Recommendation System")
 
 
 app.add_page("Welcome", welcome.app)
-app.add_page("Custom Queries", pyvis_network_app.app)
+app.add_page("Example Queries", pyvis_network_app.app)
 
 app.run()
