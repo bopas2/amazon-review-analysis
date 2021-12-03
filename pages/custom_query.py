@@ -2,7 +2,6 @@ import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
 import networkx as nx
-<<<<<<< HEAD
 import pickle
 from pyvis.network import Network
 from pages import make_network
@@ -20,14 +19,6 @@ def app():
     tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
     clustering_model = pickle.load(open('./pages/k_means_model.pickle', 'rb'))
 
-=======
-from pyvis.network import Network
-from pages import make_network
-
-# set header title
-def app():
-
->>>>>>> 9ca6a1dea3d7cf53ecbabdc9f705069e5f9c3f03
     st.markdown("### Input a Custom Query")
     st.markdown("What kind of mobile electronic product are you interested in?")
     
@@ -37,18 +28,11 @@ def app():
         st.warning("Please enter a custom query")
     else:
         st.write("Your query is: ", query)
-<<<<<<< HEAD
         df = make_network.make_network(query, tokenizer, attention_model, clustering_model)
-=======
-        df = make_network.make_network(query)
->>>>>>> 9ca6a1dea3d7cf53ecbabdc9f705069e5f9c3f03
 
         HtmlFile = open('nodes.html','r',encoding='utf-8')
         source_code = HtmlFile.read()
         components.html(source_code, height = 1000, width = 1200)
-<<<<<<< HEAD
         st.dataframe(df.head(100).sort_values("rating", ascending = False))
-=======
->>>>>>> 9ca6a1dea3d7cf53ecbabdc9f705069e5f9c3f03
         #st.dataframe(df.head(15).sort_values("helpful_votes", ascending = False).sort_values("star_rating", ascending = False))
 
