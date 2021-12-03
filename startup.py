@@ -1,5 +1,5 @@
 import streamlit as st 
-from pages import pyvis_network_app, welcome
+from pages import pyvis_network_app, welcome, custom_query
 
 class MultiPage: 
     """Framework for combining multiple streamlit applications."""
@@ -32,5 +32,6 @@ st.title("Reviews Recommendation System")
 
 app.add_page("Welcome", welcome.app)
 app.add_page("Example Queries", pyvis_network_app.app)
+app.add_page("Custom Queries", custom_query.app)
 
 app.run()
