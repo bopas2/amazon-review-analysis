@@ -1,5 +1,3 @@
-# 6242-Amazon-Reviews-Project -- CSE 6242 Final Project
-
 # Description
 This project is a data exploration project for Amazon reviews. After calculating positive or negative review sentiments and determining keywords from amazon reviews, the project groups products that have similar reviews. There is a visualization that allows users to enter a search and explore the most relevant cluster of amazon products relating to that search. In summary, this project groups products by the content of their reviews, and allows users to explore new products through an interactive visualization.
 
